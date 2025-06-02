@@ -1,0 +1,6 @@
+@rigidboys_고객사관리_HostAddress = http://localhost:5145
+
+GET {{rigidboys_고객사관리_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
