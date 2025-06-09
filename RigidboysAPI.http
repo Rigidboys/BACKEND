@@ -1,0 +1,6 @@
+@RigidboysAPI_HostAddress = http://localhost:5229
+
+GET {{RigidboysAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
