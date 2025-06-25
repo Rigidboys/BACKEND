@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RigidboysAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e0a70e7037346b55ba4c0c5f31227db33763ebb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8673bc41dc7f3891ec869e8b7cc0569dfae91b0d")]
 [assembly: System.Reflection.AssemblyProductAttribute("RigidboysAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RigidboysAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
