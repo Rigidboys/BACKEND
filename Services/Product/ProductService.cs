@@ -19,7 +19,7 @@ namespace RigidboysAPI.Services
             return await _context.Products.ToListAsync(); // ✅ 여기만 호출
         }
 
-        public async Task AddProductAsync(ProductDto dto)
+        public async Task<Product> AddProductAsync(ProductDto dto)
         {
             bool exists = await _context.Products.AnyAsync(p => p.Product_Name == dto.Product_Name);
             if (exists)
@@ -39,6 +39,7 @@ namespace RigidboysAPI.Services
 
             _context.Products.Add(entity);
             await _context.SaveChangesAsync();
+            return entity;
         }
 
         public async Task<List<string>> GetProductNamesAsync()

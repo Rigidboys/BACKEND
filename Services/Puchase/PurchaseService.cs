@@ -24,7 +24,7 @@ namespace RigidboysAPI.Services
             return await query.ToListAsync();
         }
 
-        public async Task AddPurchaseAsync(PurchaseDto dto, string userId)
+        public async Task<Purchase> AddPurchaseAsync(PurchaseDto dto, string userId)
         {
             var exists = await _context.Purchases.AnyAsync(p =>
                 p.Customer_Name == dto.Customer_Name &&
@@ -55,6 +55,7 @@ namespace RigidboysAPI.Services
 
             await _context.Purchases.AddAsync(entity);
             await _context.SaveChangesAsync();
+            return entity;
         }
 
     }
