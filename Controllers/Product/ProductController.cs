@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RigidboysAPI.Dtos;
 using RigidboysAPI.Errors;
@@ -7,6 +8,7 @@ using Swashbuckle.AspNetCore.Annotations; // ✅ 이거 추가해야 Swagger 주
 
 namespace RigidboysAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/products")]
     public class ProductController : ControllerBase
@@ -45,30 +47,31 @@ namespace RigidboysAPI.Controllers
                 return ErrorResponseHelper.HandleBadRequest(ModelState);
             try
             {
-                await _service.AddProductAsync(dto);
-                return Ok(new { message = "제품이 등록되었습니다." });
+                var savedProduct = await _service.AddProductAsync(dto);
+                return Ok(savedProduct); // ✅ 제품 객체를 응답으로 보냄
             }
-            catch (ArgumentException) //400
+            catch (ArgumentException)
             {
                 return ErrorResponseHelper.HandleBadRequest(
                     ErrorCodes.INVALID_INPUT,
                     ErrorCodes.INVALID_INPUT_MESSAGE
                 );
             }
-            catch (InvalidOperationException) //409
+            catch (InvalidOperationException)
             {
                 return ErrorResponseHelper.HandleConflict(
                     ErrorCodes.DUPLICATE_PRODUCT,
                     ErrorCodes.DUPLICATE_PRODUCT_MESSAGE
                 );
             }
-            catch (Exception ex) //500
+            catch (Exception ex)
             {
                 return ErrorResponseHelper.HandleServerError(ErrorCodes.SERVER_ERROR, ex.Message);
             }
         }
 
-        [HttpGet("Product_Names")]
+
+        [HttpGet("names")]
         [SwaggerOperation(
             Summary = "제품의 이름만 조회합니다.",
             Tags = new[] { "제품 관리" } // ✅ 여기에 태그 입력

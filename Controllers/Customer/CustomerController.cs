@@ -74,7 +74,7 @@ public class CustomerController : ControllerBase
         }
     }
 
-    [HttpGet("Office_Name")]
+    [HttpGet("name")]
     [SwaggerOperation(Summary = "고객사 이름만 조회합니다.", Tags = new[] { "고객 관리" })]
     [SwaggerResponse(200, "고객사의 이름 목록 조회 성공", typeof(List<string>))]
     public async Task<ActionResult<List<string>>> GetCustomerNames()
