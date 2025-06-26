@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USER\\Desktop\\BACKEND\\RigidboysAPI.csproj": {}
+    "C:\\Users\\user\\Desktop\\rigidboys\\RigidboysAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USER\\Desktop\\BACKEND\\RigidboysAPI.csproj": {
+    "C:\\Users\\user\\Desktop\\rigidboys\\RigidboysAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\Desktop\\BACKEND\\RigidboysAPI.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\rigidboys\\RigidboysAPI.csproj",
         "projectName": "RigidboysAPI",
-        "projectPath": "C:\\Users\\USER\\Desktop\\BACKEND\\RigidboysAPI.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\Desktop\\BACKEND\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\rigidboys\\RigidboysAPI.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\rigidboys\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -113,7 +109,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.313/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.411/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

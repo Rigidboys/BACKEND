@@ -55,10 +55,10 @@ namespace RigidboysAPI.Controllers
             var userId = User.FindFirst("UserId")?.Value;
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized(new { message = "인증 정보가 유효하지 않습니다." });
-            try
+             try
             {
-                await _service.AddPurchaseAsync(dto, userId);
-                return Ok(new { message = "매입/매출 정보가 등록되었습니다." });
+                var saved = await _service.AddPurchaseAsync(dto, userId);
+                return Ok(saved);
             }
             catch (ArgumentException) //400
             {
