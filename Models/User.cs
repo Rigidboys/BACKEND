@@ -7,19 +7,19 @@ namespace RigidboysAPI.Models
     {
         public int Id { get; set; }
 
-        [Column("Name")]
+        [Column("username")]
         public string Name { get; set; } = String.Empty;
 
-        [Column("UserId")]
+        [Column("user_id")]
         public string UserId { get; set; } = string.Empty;
 
-        [Column("PasswordHash")]
+        [Column("password")]
         public string PasswordHash { get; set; } = string.Empty;
 
-        [Column("Email")]
+        [Column("email")]
         public string Email { get; set; } = string.Empty;
 
-        [Column("Phone")]
+        [Column("phone")]
         public string Phone { get; set; } = string.Empty;
 
         public string Role { get; set; } = "User";

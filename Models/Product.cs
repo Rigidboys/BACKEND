@@ -7,22 +7,22 @@ namespace RigidboysAPI.Models
     {
         public int Id { get; set; }
 
-        [Column("Product_Name")]
+        [Column("product_name")]
         public string Product_Name { get; set; } = string.Empty;
 
-        [Column("Category")]
+        [Column("category")]
         public string Category { get; set; } = string.Empty;
 
-        [Column("License")]
+        [Column("license")]
         public string License { get; set; } = string.Empty;
 
-        [Column("Product_price")]
+        [Column("product_price")]
         public int? Product_price { get; set; }
 
-        [Column("Production_price")]
+        [Column("production_price")]
         public int? Production_price { get; set; }
 
-        [Column("Description")]
+        [Column("description")]
         public string? Description { get; set; }
     }
 }

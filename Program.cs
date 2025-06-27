@@ -63,7 +63,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:3000") // 프론트 포트 명시
+        policy.WithOrigins("http://13.239.34.236:3000") // 프론트 포트 명시
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // 필요 시
@@ -131,7 +131,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 // ✅ 인증/인가 순서 지켜야 함!
 app.UseAuthentication(); // 반드시 먼저 호출

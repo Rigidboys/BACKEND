@@ -6,15 +6,15 @@ public class LoginAttempt
     [Key]
     public int Id { get; set; }
 
-    [Column("UserId")]
+    [Column("userId")]
     public string UserId { get; set; } = string.Empty;
 
-    [Column("FailedAttempts")] //실패횟수
+    [Column("failedAttempts")] //실패횟수
     public int FailedAttempts { get; set; }
 
-    [Column("NLockedUntil")]
+    [Column("lockedUntil")]
     public DateTime? LockedUntil { get; set; }
 
-    [Column("LastAttemptAt")]
+    [Column("lastAttemptAt")]
     public DateTime LastAttemptAt { get; set; } = DateTime.UtcNow;
 }
