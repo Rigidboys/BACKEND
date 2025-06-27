@@ -1,26 +1,29 @@
 #nullable enable
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace RigidboysAPI.Models
 {
     public class Purchase
     {
+        [Key]
+        [Column("purchase_id")]
         public int Id { get; set; }
 
         [Column("seller_name")]
-        public string Seller_Name { get; set; } = string.Empty;
+        public string? Seller_Name { get; set; }  // 공급사 (nullable)
 
         [Column("purchase_or_sale")]
         public string Purchase_or_Sale { get; set; } = string.Empty;
 
         [Column("customer_name")]
-        public string Customer_Name { get; set; } = string.Empty;
-
-        [Column("purchased_date")]
-        public DateTime? Purchased_Date { get; set; }
+        public string? Customer_Name { get; set; } // 고객사명 (nullable)
 
         [Column("product_name")]
         public string Product_Name { get; set; } = string.Empty;
+
+        [Column("purchased_date")]
+        public DateTime? Purchased_Date { get; set; }
 
         [Column("purchase_amount")]
         public int? Purchase_Amount { get; set; }

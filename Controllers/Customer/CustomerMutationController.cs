@@ -22,13 +22,13 @@ namespace RigidboysAPI.Controllers
         }
 
         // ✅ 고객 정보 수정
-        [HttpPut("{id}")]
+        [HttpPut("{office_name}")]
         [SwaggerOperation(Summary = "고객 정보 수정", Tags = new[] { "고객 관리" })]
         [SwaggerResponse(200, "수정 성공", typeof(Customer))]
         [SwaggerResponse(400, "입력값 오류")]
         [SwaggerResponse(404, "고객을 찾을 수 없음")]
         [SwaggerResponse(500, "서버 오류")]
-        public async Task<IActionResult> Update(int id, [FromBody] CustomerDto dto)
+        public async Task<IActionResult> Update(string office_name, [FromBody] CustomerDto dto)
         {
             if (!ModelState.IsValid)
                 return ErrorResponseHelper.HandleBadRequest(ModelState);
@@ -40,7 +40,7 @@ namespace RigidboysAPI.Controllers
                 if (string.IsNullOrEmpty(role) || string.IsNullOrEmpty(userId))
                     return Unauthorized(new { message = "인증 정보가 유효하지 않습니다." });
 
-                var updatedCustomer = await _mutationService.UpdateAsync(id, dto, role, userId);
+                var updatedCustomer = await _mutationService.UpdateAsync(office_name, dto, role, userId);
                 return Ok(updatedCustomer);
             }
             catch (ArgumentException)
@@ -64,12 +64,12 @@ namespace RigidboysAPI.Controllers
         }
 
         // ✅ 고객 정보 삭제
-        [HttpDelete("{id}")]
+        [HttpDelete("{office_name}")]
         [SwaggerOperation(Summary = "고객 정보 삭제", Tags = new[] { "고객 관리" })]
         [SwaggerResponse(200, "삭제 성공")]
         [SwaggerResponse(404, "고객을 찾을 수 없음")]
         [SwaggerResponse(500, "서버 오류")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string office_name)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace RigidboysAPI.Controllers
 
                 if (string.IsNullOrEmpty(role) || string.IsNullOrEmpty(userId))
                     return Unauthorized(new { message = "인증 정보가 유효하지 않습니다." });
-                var deleted = await _mutationService.DeleteAsync(id, role, userId);
+                var deleted = await _mutationService.DeleteAsync(office_name, role, userId);
                 return Ok(new { message = "고객 삭제 완료" });
             }
             catch (InvalidOperationException ex)

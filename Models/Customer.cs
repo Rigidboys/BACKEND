@@ -1,12 +1,12 @@
 #nullable enable
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RigidboysAPI.Models
 {
     public class Customer
     {
-        public int Id { get; set; }
-
+        [Key]
         [Column("office_name")]
         public string Office_Name { get; set; } = string.Empty;
 

@@ -45,13 +45,25 @@ namespace RigidboysAPI.Services
 
         public async Task<List<Customer>> GetAllAsync(string role, string userId)
         {
+            if (!int.TryParse(userId, out int parsedUserId))
+                throw new ArgumentException("userId가 정수로 변환되지 않았습니다: " + userId);
+
             var query = _context.Customers.AsQueryable();
 
             if (role != "Admin")
-                query = query.Where(c => c.CreatedByUserId == int.Parse(userId));
+                query = query.Where(c => c.CreatedByUserId == parsedUserId);
 
-            return await query.ToListAsync();
+            try
+            {
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // 예외 메시지 포함
+                throw new InvalidOperationException("GetAllAsync 실패: " + ex.Message, ex);
+            }
         }
+
 
         // ✅ 여기에 role과 userId 반영된 버전 추가
         public async Task<List<string>> GetCustomerNamesAsync(string role, string userId)

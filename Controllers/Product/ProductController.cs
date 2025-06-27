@@ -4,7 +4,7 @@ using RigidboysAPI.Dtos;
 using RigidboysAPI.Errors;
 using RigidboysAPI.Models;
 using RigidboysAPI.Services;
-using Swashbuckle.AspNetCore.Annotations; // ✅ 이거 추가해야 Swagger 주석 작동
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RigidboysAPI.Controllers
 {
@@ -23,19 +23,19 @@ namespace RigidboysAPI.Controllers
         [HttpGet]
         [SwaggerOperation(
             Summary = "제품 목록 조회",
-            Tags = new[] { "제품 관리" } // ✅ 여기에 태그 입력
+            Tags = new[] { "제품 관리" }
         )]
         [SwaggerResponse(200, "조회 성공", typeof(List<Product>))]
         public async Task<ActionResult<List<Product>>> GetAll()
         {
-            var result = await _service.GetAllAsync(); // ✅ 수정된 부분
+            var result = await _service.GetAllAsync();
             return Ok(result);
         }
 
         [HttpPost]
         [SwaggerOperation(
             Summary = "제품을 추가합니다.",
-            Tags = new[] { "제품 관리" } // ✅ 여기에 태그 입력
+            Tags = new[] { "제품 관리" }
         )]
         [SwaggerResponse(200, "등록 성공")]
         [SwaggerResponse(400, "입력값 오류")]
@@ -43,38 +43,45 @@ namespace RigidboysAPI.Controllers
         [SwaggerResponse(500, "서버 오류")]
         public async Task<IActionResult> Create([FromBody] ProductDto dto)
         {
+            // ✅ 유효성 검사 실패 시 BadRequest 반환
             if (!ModelState.IsValid)
                 return ErrorResponseHelper.HandleBadRequest(ModelState);
+
             try
             {
                 var savedProduct = await _service.AddProductAsync(dto);
-                return Ok(savedProduct); // ✅ 제품 객체를 응답으로 보냄
+                return Ok(savedProduct);
             }
-            catch (ArgumentException)
+            catch (ArgumentException ex)
             {
+                // ✅ 예외 메시지를 그대로 전달 (개발 시 디버깅 유용)
                 return ErrorResponseHelper.HandleBadRequest(
                     ErrorCodes.INVALID_INPUT,
-                    ErrorCodes.INVALID_INPUT_MESSAGE
+                    ex.Message
                 );
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                // ✅ 중복된 제품 등록 시 충돌 응답
                 return ErrorResponseHelper.HandleConflict(
                     ErrorCodes.DUPLICATE_PRODUCT,
-                    ErrorCodes.DUPLICATE_PRODUCT_MESSAGE
+                    ex.Message
                 );
             }
             catch (Exception ex)
             {
-                return ErrorResponseHelper.HandleServerError(ErrorCodes.SERVER_ERROR, ex.Message);
+                // ✅ 모든 예외를 ObjectResult 기반으로 반환하여 CORS 대응
+                return ErrorResponseHelper.HandleServerError(
+                    ErrorCodes.SERVER_ERROR,
+                    ex.Message // ✅ message에 실제 예외 메시지 전달
+                );
             }
         }
-
 
         [HttpGet("names")]
         [SwaggerOperation(
             Summary = "제품의 이름만 조회합니다.",
-            Tags = new[] { "제품 관리" } // ✅ 여기에 태그 입력
+            Tags = new[] { "제품 관리" }
         )]
         [SwaggerResponse(200, "제품의 이름 목록 조회 성공", typeof(List<string>))]
         public async Task<ActionResult<List<string>>> GetProductNames()

@@ -7,10 +7,10 @@ namespace RigidboysAPI.Dtos
     {
         [Required(ErrorMessage = "매출 / 매입 선택해주세요")]
         public string Purchase_or_Sale { get; set; } = string.Empty;
-        
+
         public string? Seller_Name { get; set; }
 
-        public string Customer_Name { get; set; } = string.Empty;
+        public string? Customer_Name { get; set; }
 
         [Required(ErrorMessage = "거래일을 입력해주세요!")]
         public DateTime? Purchased_Date { get; set; }
@@ -24,15 +24,13 @@ namespace RigidboysAPI.Dtos
         [Required(ErrorMessage = "수량을 입력해주세요!")]
         public int? Purchase_Amount { get; set; }
 
-        //납부를 시작한 날짜
         public DateTime? Payment_Period_Start { get; set; }
 
-        //납부를 마친 날짜
         public DateTime? Payment_Period_End { get; set; }
 
         public DateTime? Payment_Period_Deadline { get; set; }
 
-        public Boolean? Is_Payment { get; set; }
+        public bool? Is_Payment { get; set; }
 
         [Required(ErrorMessage = "납부된 금액을 입력해주세요")]
         public int? Paid_Payment { get; set; }

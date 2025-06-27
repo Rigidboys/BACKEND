@@ -16,7 +16,7 @@ namespace RigidboysAPI.Services
 
         public async Task<List<Product>> GetAllAsync()
         {
-            return await _context.Products.ToListAsync(); // ✅ 여기만 호출
+            return await _context.Products.ToListAsync();
         }
 
         public async Task<Product> AddProductAsync(ProductDto dto)
@@ -38,13 +38,25 @@ namespace RigidboysAPI.Services
             };
 
             _context.Products.Add(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // ✅ DB 제약 조건 오류를 프론트에서 확인할 수 있게 전달
+                throw new Exception("제품 등록 중 오류: " + ex.InnerException?.Message);
+            }
+
             return entity;
         }
 
         public async Task<List<string>> GetProductNamesAsync()
         {
-            return await _context.Products.Select(p => p.Product_Name).Distinct().ToListAsync();
+            return await _context.Products
+                .Select(p => p.Product_Name)
+                .Distinct()
+                .ToListAsync();
         }
     }
 }

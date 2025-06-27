@@ -4,6 +4,9 @@ using RigidboysAPI.Errors;
 using RigidboysAPI.Models;
 using RigidboysAPI.Services;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using RigidboysAPI.Data;
 
 namespace RigidboysAPI.Controllers
 {
@@ -19,29 +22,33 @@ namespace RigidboysAPI.Controllers
         }
 
         [HttpGet]
-        [SwaggerOperation(
-            Summary = "매입 / 매출 정보 조회",
-            Tags = new[] { "매입 / 매출 관리" } // ✅ 여기에 태그 입력
-        )]
-        [SwaggerResponse(200, "조회 성공", typeof(List<Purchase>))]
         public async Task<ActionResult<List<Purchase>>> GetAll()
         {
-            var role = User.FindFirst(
-                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-            )?.Value;
-            var userId = User.FindFirst("UserId")?.Value;
+            try
+            {
+                var role = User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+                var userId = User.FindFirst("UserId")?.Value;
 
-            if (string.IsNullOrEmpty(role) || string.IsNullOrEmpty(userId))
-                return Unauthorized(new { message = "인증 정보가 유효하지 않습니다." });
+                if (string.IsNullOrEmpty(role) || string.IsNullOrEmpty(userId))
+                {
+                    Console.WriteLine("❗인증 정보 누락!");
+                    return Unauthorized(new { message = "인증 정보가 유효하지 않습니다." });
+                }
 
-            var result = await _service.GetAllAsync(role, userId); // ✅ 변경
-            return Ok(result);
+                var result = await _service.GetAllAsync(role, userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❗[GetAll 에러]: {ex.Message}");
+                return StatusCode(500, new { message = "서버 내부 오류 발생", detail = ex.Message });
+            }
         }
 
         [HttpPost]
         [SwaggerOperation(
             Summary = "매입 / 매출을 등록합니다.",
-            Tags = new[] { "매입 / 매출 관리" } // ✅ 여기에 태그 입력
+            Tags = new[] { "매입 / 매출 관리" }
         )]
         [SwaggerResponse(200, "등록 성공")]
         [SwaggerResponse(400, "입력값 오류")]
@@ -49,33 +56,40 @@ namespace RigidboysAPI.Controllers
         [SwaggerResponse(500, "서버 오류")]
         public async Task<IActionResult> Create([FromBody] PurchaseDto dto)
         {
+            Console.WriteLine("🟢 [Create 시작] dto: " + JsonSerializer.Serialize(dto));
+            if (!ModelState.IsValid)
+                Console.WriteLine("⚠️ 유효성 검사 실패: " + JsonSerializer.Serialize(ModelState));
+
             if (!ModelState.IsValid)
                 return ErrorResponseHelper.HandleBadRequest(ModelState);
 
             var userId = User.FindFirst("UserId")?.Value;
+            Console.WriteLine("🔒 userId: " + userId);
             if (string.IsNullOrEmpty(userId))
+            {
+                Console.WriteLine("❗ 인증정보 누락");
                 return Unauthorized(new { message = "인증 정보가 유효하지 않습니다." });
-             try
+            }
+
+            try
             {
                 var saved = await _service.AddPurchaseAsync(dto, userId);
+                Console.WriteLine("✅ 저장 완료: Id=" + saved.Id);
                 return Ok(saved);
             }
-            catch (ArgumentException) //400
+            catch (ArgumentException ex)
             {
-                return ErrorResponseHelper.HandleBadRequest(
-                    ErrorCodes.INVALID_INPUT,
-                    ErrorCodes.INVALID_INPUT_MESSAGE
-                );
+                Console.WriteLine("🚫 ArgumentException: " + ex.Message);
+                return ErrorResponseHelper.HandleBadRequest(ErrorCodes.INVALID_INPUT, ex.Message);
             }
-            catch (InvalidOperationException) //409
+            catch (InvalidOperationException ex)
             {
-                return ErrorResponseHelper.HandleConflict(
-                    ErrorCodes.DUPLICATE_PURCHASE,
-                    ErrorCodes.DUPLICATE_PURCHASE_MESSAGE
-                );
+                Console.WriteLine("🚫 InvalidOperationException: " + ex.Message);
+                return ErrorResponseHelper.HandleConflict(ErrorCodes.DUPLICATE_PURCHASE, ex.Message);
             }
-            catch (Exception ex) //500
+            catch (Exception ex)
             {
+                Console.WriteLine("🔥 Exception: " + ex.Message + "\n" + ex.StackTrace);
                 return ErrorResponseHelper.HandleServerError(ErrorCodes.SERVER_ERROR, ex.Message);
             }
         }

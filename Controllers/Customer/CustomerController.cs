@@ -19,21 +19,31 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet]
-    [SwaggerOperation(Summary = "고객 목록 조회", Tags = new[] { "고객 관리" })]
-    [SwaggerResponse(200, "조회 성공", typeof(List<Customer>))]
-    public async Task<ActionResult<List<Customer>>> GetAll()
+[SwaggerOperation(Summary = "고객 목록 조회", Tags = new[] { "고객 관리" })]
+[SwaggerResponse(200, "조회 성공", typeof(List<Customer>))]
+public async Task<ActionResult<List<Customer>>> GetAll()
+{
+    try
     {
-        var role = User.FindFirst(
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-        )?.Value!;
+        var role = User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
         var userId = User.FindFirst("UserId")?.Value;
 
         if (string.IsNullOrEmpty(role) || string.IsNullOrEmpty(userId))
             return Unauthorized(new { message = "인증 정보가 유효하지 않습니다." });
 
-        var result = await _service.GetAllAsync(role!, userId);
+        var result = await _service.GetAllAsync(role, userId);
         return Ok(result);
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[고객 조회 실패] {ex.Message}\n{ex.StackTrace}");
+        return StatusCode(500, new
+        {
+            code = "SERVER_ERROR",
+            message = $"고객 목록 조회 중 오류 발생: {ex.Message}"
+        });
+    }
+}
 
     [HttpPost]
     [SwaggerOperation(Summary = "고객을 등록합니다.", Tags = new[] { "고객 관리" })]

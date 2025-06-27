@@ -122,16 +122,21 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/error"); // 프로덕션용 핸들러
+}
+else
+{
+    app.UseDeveloperExceptionPage(); // 개발 중 상세 오류 보기
+}
+
+app.UseRouting();
+
 // ✅ 미들웨어 순서 매우 중요!
 app.UseCors("AllowReactApp");
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-//app.UseHttpsRedirection();
 
 // ✅ 인증/인가 순서 지켜야 함!
 app.UseAuthentication(); // 반드시 먼저 호출
