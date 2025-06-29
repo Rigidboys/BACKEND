@@ -65,7 +65,8 @@ namespace RigidboysAPI.Services
             var exists = await _context.Purchases.AnyAsync(p =>
                 p.Purchase_or_Sale == dto.Purchase_or_Sale &&
                 p.Purchased_Date == dto.Purchased_Date &&
-                p.Product_Name == dto.Product_Name
+                p.Product_Name == dto.Product_Name &&
+                (dto.Purchase_or_Sale =="매입" ? p.Seller_Name == dto.Seller_Name : true)
             );
 
             if (exists)

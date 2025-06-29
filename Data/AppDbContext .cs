@@ -38,9 +38,8 @@ namespace RigidboysAPI.Data
                     p.Purchase_or_Sale,
                     p.Purchased_Date,
                     p.Product_Name,
+                    p.Seller_Name
                 }).IsUnique();
-
-                // Customer_Name nullable & FK 제한조건 제거 또는 완화 필요 (DB에서 FK 삭제하거나 설정 변경)
             });
         }
     }
